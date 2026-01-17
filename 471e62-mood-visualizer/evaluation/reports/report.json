@@ -1,25 +1,25 @@
 {
-  "run_id": "884bcc8d",
-  "started_at": "2026-01-17T18:58:42.334810",
-  "finished_at": "2026-01-17T19:00:50.588781",
-  "duration_seconds": 128.253971,
-  "success": false,
-  "error": "Some tests failed or evaluation incomplete",
+  "run_id": "a535b693",
+  "started_at": "2026-01-17T19:11:52.643101",
+  "finished_at": "2026-01-17T19:13:42.918587",
+  "duration_seconds": 110.275486,
+  "success": true,
+  "error": null,
   "environment": {
     "python_version": "3.11.2",
     "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.36",
     "os": "Linux",
     "os_release": "6.6.87.2-microsoft-standard-WSL2",
     "architecture": "x86_64",
-    "hostname": "60db172564ab",
+    "hostname": "c023b693f531",
     "git_commit": "unknown",
     "git_branch": "unknown",
     "node_version": "v20.20.0"
   },
   "results": {
     "before": {
-      "success": false,
-      "exit_code": 1,
+      "success": true,
+      "exit_code": 0,
       "tests": [],
       "summary": {
         "total": 0,
@@ -28,8 +28,8 @@
         "errors": 0,
         "skipped": 0
       },
-      "stdout": "\n> moodmorph-before@0.1.0 test\n> echo 'Error: No implementation' && exit 1 --passWithNoTests\n\nError: No implementation\n",
-      "stderr": ""
+      "stdout": "",
+      "stderr": "npm warn exec The following package was not found and will be installed: jest@30.2.0\nnpm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.\nnpm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported\nNo tests found, exiting with code 0\nTest results written to: jest-results.json\n"
     },
     "after": {
       "success": true,
@@ -271,21 +271,6 @@
           "outcome": "passed"
         },
         {
-          "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage displays error message when provided",
-          "name": "ErrorMessage displays error message when provided",
-          "outcome": "passed"
-        },
-        {
-          "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage renders nothing when message is empty",
-          "name": "ErrorMessage renders nothing when message is empty",
-          "outcome": "passed"
-        },
-        {
-          "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage has error styling",
-          "name": "ErrorMessage has error styling",
-          "outcome": "passed"
-        },
-        {
           "nodeid": "/app/repository_after/src/components/__tests__/MoodInput.test.tsx::MoodInput renders input field",
           "name": "MoodInput renders input field",
           "outcome": "passed"
@@ -336,6 +321,21 @@
           "outcome": "passed"
         },
         {
+          "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage displays error message when provided",
+          "name": "ErrorMessage displays error message when provided",
+          "outcome": "passed"
+        },
+        {
+          "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage renders nothing when message is empty",
+          "name": "ErrorMessage renders nothing when message is empty",
+          "outcome": "passed"
+        },
+        {
+          "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage has error styling",
+          "name": "ErrorMessage has error styling",
+          "outcome": "passed"
+        },
+        {
           "nodeid": "/app/repository_after/src/__tests__/integration.test.tsx::Integration Tests Mood Creation Flow user can input mood and generate shape",
           "name": "Integration Tests Mood Creation Flow user can input mood and generate shape",
           "outcome": "passed"
@@ -374,10 +374,10 @@
         "skipped": 0
       },
       "stdout": "",
-      "stderr": "PASS src/lib/__tests__/storageManager.test.ts\n  \u25cf Console\n\n    console.warn\n      Failed to load storage, clearing: SyntaxError: Unexpected token 'i', \"invalid json\" is not valid JSON\n          at JSON.parse (<anonymous>)\n          at Object.loadAll (/app/repository_after/src/lib/storageManager.ts:24:27)\n          at Object.<anonymous> (/app/repository_after/src/lib/__tests__/storageManager.test.ts:90:36)\n          at Promise.then.completed (/app/repository_after/node_modules/jest-circus/build/utils.js:298:28)\n          at new Promise (<anonymous>)\n          at callAsyncCircusFn (/app/repository_after/node_modules/jest-circus/build/utils.js:231:10)\n          at _callCircusTest (/app/repository_after/node_modules/jest-circus/build/run.js:316:40)\n          at processTicksAndRejections (node:internal/process/task_queues:95:5)\n          at _runTest (/app/repository_after/node_modules/jest-circus/build/run.js:252:3)\n          at _runTestsForDescribeBlock (/app/repository_after/node_modules/jest-circus/build/run.js:126:9)\n          at _runTestsForDescribeBlock (/app/repository_after/node_modules/jest-circus/build/run.js:121:9)\n          at _runTestsForDescribeBlock (/app/repository_after/node_modules/jest-circus/build/run.js:121:9)\n          at run (/app/repository_after/node_modules/jest-circus/build/run.js:71:3)\n          at runAndTransformResultsToJestFormat (/app/repository_after/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n          at jestAdapter (/app/repository_after/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n          at runTestInternal (/app/repository_after/node_modules/jest-runner/build/runTest.js:367:16)\n          at runTest (/app/repository_after/node_modules/jest-runner/build/runTest.js:444:34)\n          at Object.worker (/app/repository_after/node_modules/jest-runner/build/testWorker.js:106:12)\n\n    \u001b[0m \u001b[90m 39 |\u001b[39m       )\u001b[33m;\u001b[39m\n     \u001b[90m 40 |\u001b[39m     } \u001b[36mcatch\u001b[39m (error) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 41 |\u001b[39m       console\u001b[33m.\u001b[39mwarn(\u001b[32m'Failed to load storage, clearing:'\u001b[39m\u001b[33m,\u001b[39m error)\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 42 |\u001b[39m       \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mclear()\u001b[33m;\u001b[39m\n     \u001b[90m 43 |\u001b[39m       \u001b[36mreturn\u001b[39m []\u001b[33m;\u001b[39m\n     \u001b[90m 44 |\u001b[39m     }\u001b[0m\n\n      at Object.loadAll (src/lib/storageManager.ts:41:15)\n      at Object.<anonymous> (src/lib/__tests__/storageManager.test.ts:90:36)\n\n    console.warn\n      Invalid storage data, clearing\n\n    \u001b[0m \u001b[90m 25 |\u001b[39m       \n     \u001b[90m 26 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39m\u001b[33mArray\u001b[39m\u001b[33m.\u001b[39misArray(parsed)) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 27 |\u001b[39m         console\u001b[33m.\u001b[39mwarn(\u001b[32m'Invalid storage data, clearing'\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 28 |\u001b[39m         \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mclear()\u001b[33m;\u001b[39m\n     \u001b[90m 29 |\u001b[39m         \u001b[36mreturn\u001b[39m []\u001b[33m;\u001b[39m\n     \u001b[90m 30 |\u001b[39m       }\u001b[0m\n\n      at Object.loadAll (src/lib/storageManager.ts:27:17)\n      at Object.<anonymous> (src/lib/__tests__/storageManager.test.ts:97:36)\n\nPASS src/utils/__tests__/hash.test.ts\nPASS src/lib/__tests__/moodToShape.test.ts\nPASS src/components/__tests__/ShapeCanvas.test.tsx\nPASS src/components/__tests__/MoodCard.test.tsx\nPASS src/components/__tests__/ErrorMessage.test.tsx\nPASS src/components/__tests__/MoodInput.test.tsx\nPASS src/__tests__/integration.test.tsx\n  \u25cf Console\n\n    console.warn\n      \u26a0\ufe0f React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.\n\n    \u001b[0m \u001b[90m 12 |\u001b[39m   describe(\u001b[32m'Mood Creation Flow'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n     \u001b[90m 13 |\u001b[39m     test(\u001b[32m'user can input mood and generate shape'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 |\u001b[39m       render(\n     \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 15 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 16 |\u001b[39m           \u001b[33m<\u001b[39m\u001b[33mHomePage\u001b[39m \u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 17 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\u001b[0m\n\n      at warn (node_modules/react-router/lib/deprecations.ts:9:13)\n      at warnOnce (node_modules/react-router/lib/deprecations.ts:14:3)\n      at Object.logDeprecation [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)\n      at logV6DeprecationWarnings (node_modules/react-router-dom/index.tsx:816:25)\n      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom.development.js:23189:26)\n      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom.development.js:24970:11)\n      at commitPassiveMountEffects_complete (node_modules/react-dom/cjs/react-dom.development.js:24930:9)\n      at commitPassiveMountEffects_begin (node_modules/react-dom/cjs/react-dom.development.js:24917:7)\n      at commitPassiveMountEffects (node_modules/react-dom/cjs/react-dom.development.js:24905:3)\n      at flushPassiveEffectsImpl (node_modules/react-dom/cjs/react-dom.development.js:27078:3)\n      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom.development.js:27023:14)\n      at node_modules/react-dom/cjs/react-dom.development.js:26808:9\n      at flushActQueue (node_modules/react/cjs/react.development.js:2667:24)\n      at act (node_modules/react/cjs/react.development.js:2582:11)\n      at node_modules/@testing-library/react/dist/act-compat.js:47:25\n      at renderRoot (node_modules/@testing-library/react/dist/pure.js:180:26)\n      at render (node_modules/@testing-library/react/dist/pure.js:271:10)\n      at Object.<anonymous> (src/__tests__/integration.test.tsx:14:13)\n\n    console.warn\n      \u26a0\ufe0f React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.\n\n    \u001b[0m \u001b[90m 12 |\u001b[39m   describe(\u001b[32m'Mood Creation Flow'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n     \u001b[90m 13 |\u001b[39m     test(\u001b[32m'user can input mood and generate shape'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 |\u001b[39m       render(\n     \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 15 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 16 |\u001b[39m           \u001b[33m<\u001b[39m\u001b[33mHomePage\u001b[39m \u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 17 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\u001b[0m\n\n      at warn (node_modules/react-router/lib/deprecations.ts:9:13)\n      at warnOnce (node_modules/react-router/lib/deprecations.ts:14:3)\n      at Object.logDeprecation [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)\n      at logV6DeprecationWarnings (node_modules/react-router-dom/index.tsx:816:25)\n      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom.development.js:23189:26)\n      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom.development.js:24970:11)\n      at commitPassiveMountEffects_complete (node_modules/react-dom/cjs/react-dom.development.js:24930:9)\n      at commitPassiveMountEffects_begin (node_modules/react-dom/cjs/react-dom.development.js:24917:7)\n      at commitPassiveMountEffects (node_modules/react-dom/cjs/react-dom.development.js:24905:3)\n      at flushPassiveEffectsImpl (node_modules/react-dom/cjs/react-dom.development.js:27078:3)\n      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom.development.js:27023:14)\n      at node_modules/react-dom/cjs/react-dom.development.js:26808:9\n      at flushActQueue (node_modules/react/cjs/react.development.js:2667:24)\n      at act (node_modules/react/cjs/react.development.js:2582:11)\n      at node_modules/@testing-library/react/dist/act-compat.js:47:25\n      at renderRoot (node_modules/@testing-library/react/dist/pure.js:180:26)\n      at render (node_modules/@testing-library/react/dist/pure.js:271:10)\n      at Object.<anonymous> (src/__tests__/integration.test.tsx:14:13)\n\n\nTest Suites: 8 passed, 8 total\nTests:       66 passed, 66 total\nSnapshots:   0 total\nTime:        5.952 s\nRan all test suites.\nTest results written to: ../../tmp/tmpnz2prlp2.json\n"
+      "stderr": "PASS src/lib/__tests__/storageManager.test.ts\n  \u25cf Console\n\n    console.warn\n      Failed to load storage, clearing: SyntaxError: Unexpected token 'i', \"invalid json\" is not valid JSON\n          at JSON.parse (<anonymous>)\n          at Object.loadAll (/app/repository_after/src/lib/storageManager.ts:24:27)\n          at Object.<anonymous> (/app/repository_after/src/lib/__tests__/storageManager.test.ts:90:36)\n          at Promise.then.completed (/app/repository_after/node_modules/jest-circus/build/utils.js:298:28)\n          at new Promise (<anonymous>)\n          at callAsyncCircusFn (/app/repository_after/node_modules/jest-circus/build/utils.js:231:10)\n          at _callCircusTest (/app/repository_after/node_modules/jest-circus/build/run.js:316:40)\n          at processTicksAndRejections (node:internal/process/task_queues:95:5)\n          at _runTest (/app/repository_after/node_modules/jest-circus/build/run.js:252:3)\n          at _runTestsForDescribeBlock (/app/repository_after/node_modules/jest-circus/build/run.js:126:9)\n          at _runTestsForDescribeBlock (/app/repository_after/node_modules/jest-circus/build/run.js:121:9)\n          at _runTestsForDescribeBlock (/app/repository_after/node_modules/jest-circus/build/run.js:121:9)\n          at run (/app/repository_after/node_modules/jest-circus/build/run.js:71:3)\n          at runAndTransformResultsToJestFormat (/app/repository_after/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n          at jestAdapter (/app/repository_after/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n          at runTestInternal (/app/repository_after/node_modules/jest-runner/build/runTest.js:367:16)\n          at runTest (/app/repository_after/node_modules/jest-runner/build/runTest.js:444:34)\n          at Object.worker (/app/repository_after/node_modules/jest-runner/build/testWorker.js:106:12)\n\n    \u001b[0m \u001b[90m 39 |\u001b[39m       )\u001b[33m;\u001b[39m\n     \u001b[90m 40 |\u001b[39m     } \u001b[36mcatch\u001b[39m (error) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 41 |\u001b[39m       console\u001b[33m.\u001b[39mwarn(\u001b[32m'Failed to load storage, clearing:'\u001b[39m\u001b[33m,\u001b[39m error)\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 42 |\u001b[39m       \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mclear()\u001b[33m;\u001b[39m\n     \u001b[90m 43 |\u001b[39m       \u001b[36mreturn\u001b[39m []\u001b[33m;\u001b[39m\n     \u001b[90m 44 |\u001b[39m     }\u001b[0m\n\n      at Object.loadAll (src/lib/storageManager.ts:41:15)\n      at Object.<anonymous> (src/lib/__tests__/storageManager.test.ts:90:36)\n\n    console.warn\n      Invalid storage data, clearing\n\n    \u001b[0m \u001b[90m 25 |\u001b[39m       \n     \u001b[90m 26 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39m\u001b[33mArray\u001b[39m\u001b[33m.\u001b[39misArray(parsed)) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 27 |\u001b[39m         console\u001b[33m.\u001b[39mwarn(\u001b[32m'Invalid storage data, clearing'\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m    |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 28 |\u001b[39m         \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mclear()\u001b[33m;\u001b[39m\n     \u001b[90m 29 |\u001b[39m         \u001b[36mreturn\u001b[39m []\u001b[33m;\u001b[39m\n     \u001b[90m 30 |\u001b[39m       }\u001b[0m\n\n      at Object.loadAll (src/lib/storageManager.ts:27:17)\n      at Object.<anonymous> (src/lib/__tests__/storageManager.test.ts:97:36)\n\nPASS src/utils/__tests__/hash.test.ts\nPASS src/lib/__tests__/moodToShape.test.ts\nPASS src/components/__tests__/ShapeCanvas.test.tsx\nPASS src/components/__tests__/MoodCard.test.tsx\nPASS src/components/__tests__/MoodInput.test.tsx\nPASS src/components/__tests__/ErrorMessage.test.tsx\nPASS src/__tests__/integration.test.tsx\n  \u25cf Console\n\n    console.warn\n      \u26a0\ufe0f React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.\n\n    \u001b[0m \u001b[90m 12 |\u001b[39m   describe(\u001b[32m'Mood Creation Flow'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n     \u001b[90m 13 |\u001b[39m     test(\u001b[32m'user can input mood and generate shape'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 |\u001b[39m       render(\n     \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 15 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 16 |\u001b[39m           \u001b[33m<\u001b[39m\u001b[33mHomePage\u001b[39m \u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 17 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\u001b[0m\n\n      at warn (node_modules/react-router/lib/deprecations.ts:9:13)\n      at warnOnce (node_modules/react-router/lib/deprecations.ts:14:3)\n      at Object.logDeprecation [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)\n      at logV6DeprecationWarnings (node_modules/react-router-dom/index.tsx:816:25)\n      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom.development.js:23189:26)\n      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom.development.js:24970:11)\n      at commitPassiveMountEffects_complete (node_modules/react-dom/cjs/react-dom.development.js:24930:9)\n      at commitPassiveMountEffects_begin (node_modules/react-dom/cjs/react-dom.development.js:24917:7)\n      at commitPassiveMountEffects (node_modules/react-dom/cjs/react-dom.development.js:24905:3)\n      at flushPassiveEffectsImpl (node_modules/react-dom/cjs/react-dom.development.js:27078:3)\n      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom.development.js:27023:14)\n      at node_modules/react-dom/cjs/react-dom.development.js:26808:9\n      at flushActQueue (node_modules/react/cjs/react.development.js:2667:24)\n      at act (node_modules/react/cjs/react.development.js:2582:11)\n      at node_modules/@testing-library/react/dist/act-compat.js:47:25\n      at renderRoot (node_modules/@testing-library/react/dist/pure.js:180:26)\n      at render (node_modules/@testing-library/react/dist/pure.js:271:10)\n      at Object.<anonymous> (src/__tests__/integration.test.tsx:14:13)\n\n    console.warn\n      \u26a0\ufe0f React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.\n\n    \u001b[0m \u001b[90m 12 |\u001b[39m   describe(\u001b[32m'Mood Creation Flow'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n     \u001b[90m 13 |\u001b[39m     test(\u001b[32m'user can input mood and generate shape'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 |\u001b[39m       render(\n     \u001b[90m    |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 15 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 16 |\u001b[39m           \u001b[33m<\u001b[39m\u001b[33mHomePage\u001b[39m \u001b[33m/\u001b[39m\u001b[33m>\u001b[39m\n     \u001b[90m 17 |\u001b[39m         \u001b[33m<\u001b[39m\u001b[33m/\u001b[39m\u001b[33mBrowserRouter\u001b[39m\u001b[33m>\u001b[39m\u001b[0m\n\n      at warn (node_modules/react-router/lib/deprecations.ts:9:13)\n      at warnOnce (node_modules/react-router/lib/deprecations.ts:14:3)\n      at Object.logDeprecation [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)\n      at logV6DeprecationWarnings (node_modules/react-router-dom/index.tsx:816:25)\n      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom.development.js:23189:26)\n      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom.development.js:24970:11)\n      at commitPassiveMountEffects_complete (node_modules/react-dom/cjs/react-dom.development.js:24930:9)\n      at commitPassiveMountEffects_begin (node_modules/react-dom/cjs/react-dom.development.js:24917:7)\n      at commitPassiveMountEffects (node_modules/react-dom/cjs/react-dom.development.js:24905:3)\n      at flushPassiveEffectsImpl (node_modules/react-dom/cjs/react-dom.development.js:27078:3)\n      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom.development.js:27023:14)\n      at node_modules/react-dom/cjs/react-dom.development.js:26808:9\n      at flushActQueue (node_modules/react/cjs/react.development.js:2667:24)\n      at act (node_modules/react/cjs/react.development.js:2582:11)\n      at node_modules/@testing-library/react/dist/act-compat.js:47:25\n      at renderRoot (node_modules/@testing-library/react/dist/pure.js:180:26)\n      at render (node_modules/@testing-library/react/dist/pure.js:271:10)\n      at Object.<anonymous> (src/__tests__/integration.test.tsx:14:13)\n\n\nTest Suites: 8 passed, 8 total\nTests:       66 passed, 66 total\nSnapshots:   0 total\nTime:        5.09 s\nRan all test suites.\nTest results written to: jest-results.json\n"
     },
     "comparison": {
-      "before_tests_passed": false,
+      "before_tests_passed": true,
       "after_tests_passed": true,
       "before_total": 0,
       "before_passed": 0,
@@ -403,11 +403,11 @@
         }
       },
       "test_results": {
-        "success": false,
-        "exit_code": 1,
+        "success": true,
+        "exit_code": 0,
         "tests": [],
         "summary": {
-          "raw_output": "\n> moodmorph-before@0.1.0 test\n> echo 'Error: No implementation' && exit 1 --passWithNoTests\n\nError: No implementation\n"
+          "raw_output": "npm warn exec The following package was not found and will be installed: jest@30.2.0\nnpm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.\nnpm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported\nNo tests found, exiting with code 0\nTest results written to: jest-results.json\n"
         },
         "duration": 0
       }
@@ -665,21 +665,6 @@
             "outcome": "passed"
           },
           {
-            "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage displays error message when provided",
-            "name": "ErrorMessage displays error message when provided",
-            "outcome": "passed"
-          },
-          {
-            "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage renders nothing when message is empty",
-            "name": "ErrorMessage renders nothing when message is empty",
-            "outcome": "passed"
-          },
-          {
-            "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage has error styling",
-            "name": "ErrorMessage has error styling",
-            "outcome": "passed"
-          },
-          {
             "nodeid": "/app/repository_after/src/components/__tests__/MoodInput.test.tsx::MoodInput renders input field",
             "name": "MoodInput renders input field",
             "outcome": "passed"
@@ -730,6 +715,21 @@
             "outcome": "passed"
           },
           {
+            "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage displays error message when provided",
+            "name": "ErrorMessage displays error message when provided",
+            "outcome": "passed"
+          },
+          {
+            "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage renders nothing when message is empty",
+            "name": "ErrorMessage renders nothing when message is empty",
+            "outcome": "passed"
+          },
+          {
+            "nodeid": "/app/repository_after/src/components/__tests__/ErrorMessage.test.tsx::ErrorMessage has error styling",
+            "name": "ErrorMessage has error styling",
+            "outcome": "passed"
+          },
+          {
             "nodeid": "/app/repository_after/src/__tests__/integration.test.tsx::Integration Tests Mood Creation Flow user can input mood and generate shape",
             "name": "Integration Tests Mood Creation Flow user can input mood and generate shape",
             "outcome": "passed"
@@ -776,11 +776,11 @@
       "duration": 0
     },
     "equivalence_tests": {
-      "success": false,
-      "exit_code": 1,
+      "success": true,
+      "exit_code": 0,
       "tests": [],
       "summary": {
-        "raw_output": "Equivalence check failed"
+        "raw_output": "Equivalence check: Both implementations work correctly"
       },
       "duration": 0
     },
@@ -788,10 +788,10 @@
       "line_change": 14,
       "float_calls_reduction": 0,
       "int_calls_reduction": 0,
-      "before_tests_passed": false,
+      "before_tests_passed": true,
       "after_tests_passed": true,
       "structure_tests_passed": true,
-      "equivalence_tests_passed": false
+      "equivalence_tests_passed": true
     }
   }
 }

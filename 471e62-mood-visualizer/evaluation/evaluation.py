@@ -314,6 +314,37 @@ def run_tests(repo_name: str):
             "stderr": ""
         }
     
+    # Check if package.json exists
+    package_json_path = repo_path / "package.json"
+    if not package_json_path.exists():
+        return {
+            "success": False,
+            "exit_code": -1,
+            "tests": [],
+            "summary": {
+                "total": 0,
+                "passed": 0,
+                "failed": 0,
+                "errors": 0,
+                "skipped": 0
+            },
+            "stdout": f"package.json not found in {repo_name}",
+            "stderr": ""
+        }
+    
+    # Initialize variables
+    proc = None
+    stdout = ""
+    stderr = ""
+    tests = []
+    summary = {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+    }
+    
     try:
         # Run tests with JSON output to a file, then read it
         # Try repo directory first (more reliable in Docker), fallback to temp dir
@@ -330,6 +361,8 @@ def run_tests(repo_name: str):
             # Run Jest with JSON reporter (also capture stdout/stderr for full output)
             # Use absolute path for outputFile
             json_file_abs = os.path.abspath(json_file)
+            
+            # First try npx jest
             proc = subprocess.run(
                 ["npx", "jest", "--passWithNoTests", "--json", "--outputFile", json_file_abs],
                 cwd=repo_path,
@@ -339,20 +372,15 @@ def run_tests(repo_name: str):
                 env={**os.environ, "CI": "true"}  # Set CI to reduce some warnings
             )
             
-            stdout = proc.stdout
-            stderr = proc.stderr
+            stdout = proc.stdout or ""
+            stderr = proc.stderr or ""
             full_output = stdout + stderr
             
-            # Try to read JSON output
-            tests = []
-            summary = {
-                "total": 0,
-                "passed": 0,
-                "failed": 0,
-                "errors": 0,
-                "skipped": 0
-            }
+            # If npx jest fails with command not found, try npm test instead
+            if proc.returncode != 0 and ("command not found" in stderr.lower() or "not found" in stderr.lower() or not stdout):
+                raise FileNotFoundError("npx jest not found, trying npm test")
             
+            # Try to read JSON output
             json_parsed = False
             try:
                 json_file_abs = os.path.abspath(json_file)
@@ -410,14 +438,15 @@ def run_tests(repo_name: str):
                     timeout=120,
                     env={**os.environ, "CI": "true"}  # Set CI to reduce some warnings
                 )
-                stdout = proc.stdout
-                stderr = proc.stderr
+                stdout = proc.stdout or ""
+                stderr = proc.stderr or ""
                 full_output = stdout + stderr
                 parsed = parse_jest_output(full_output)
                 tests = parsed["tests"]
                 summary = parsed["summary"]
             except Exception as fallback_error:
-                # Last resort: return error info
+                # Last resort: return error info with details
+                error_msg = f"Error running tests: {str(e)}. Fallback also failed: {str(fallback_error)}"
                 return {
                     "success": False,
                     "exit_code": -1,
@@ -429,9 +458,20 @@ def run_tests(repo_name: str):
                         "errors": 0,
                         "skipped": 0
                     },
-                    "stdout": f"Error running tests: {str(e)}. Fallback also failed: {str(fallback_error)}",
-                    "stderr": ""
+                    "stdout": error_msg,
+                    "stderr": f"Initial error: {str(e)}\nFallback error: {str(fallback_error)}"
                 }
+        
+        # Ensure proc was set
+        if proc is None:
+            return {
+                "success": False,
+                "exit_code": -1,
+                "tests": [],
+                "summary": summary,
+                "stdout": stdout or "No test process executed",
+                "stderr": stderr or "Failed to execute test command"
+            }
         
         # Handle exit code 4 (Jest "no tests collected")
         # Exit code 4 can be a false positive if tests actually ran and passed
@@ -509,9 +549,19 @@ def run_evaluation():
     try:
         print("🔍 Evaluating repository_before...")
         before_result = run_tests("repository_before")
+        print(f"  Before result: success={before_result.get('success')}, exit_code={before_result.get('exit_code')}, tests={len(before_result.get('tests', []))}, total={before_result.get('summary', {}).get('total', 0)}")
+        if before_result.get('stdout'):
+            print(f"  Before stdout (first 200 chars): {before_result.get('stdout', '')[:200]}")
+        if before_result.get('stderr'):
+            print(f"  Before stderr (first 200 chars): {before_result.get('stderr', '')[:200]}")
         
         print("🔍 Evaluating repository_after...")
         after_result = run_tests("repository_after")
+        print(f"  After result: success={after_result.get('success')}, exit_code={after_result.get('exit_code')}, tests={len(after_result.get('tests', []))}, total={after_result.get('summary', {}).get('total', 0)}")
+        if after_result.get('stdout'):
+            print(f"  After stdout (first 200 chars): {after_result.get('stdout', '')[:200]}")
+        if after_result.get('stderr'):
+            print(f"  After stderr (first 200 chars): {after_result.get('stderr', '')[:200]}")
         
         # Analyze structure for both repositories
         before_structure = analyze_structure("repository_before")
@@ -540,12 +590,24 @@ def run_evaluation():
             after_exit_code = 0 if after_passed else 1
         
         # Create test_results format for metrics
+        before_stdout = before_result.get("stdout", "") or ""
+        before_stderr = before_result.get("stderr", "") or ""
+        before_output = (before_stdout + before_stderr).strip()
+        if not before_output:
+            before_output = f"Exit code: {before_result.get('exit_code', 'unknown')}, Tests: {before_result.get('summary', {}).get('total', 0)}"
+        
+        after_stdout = after_result.get("stdout", "") or ""
+        after_stderr = after_result.get("stderr", "") or ""
+        after_output = (after_stdout + after_stderr).strip()
+        if not after_output:
+            after_output = f"Exit code: {after_result.get('exit_code', 'unknown')}, Tests: {after_result.get('summary', {}).get('total', 0)}"
+        
         before_test_results = {
             "success": before_passed,
             "exit_code": before_exit_code,
             "tests": before_result.get("tests", []),
             "summary": {
-                "raw_output": (before_result.get("stdout", "") + before_result.get("stderr", ""))[:1000] if (before_result.get("stdout") or before_result.get("stderr")) else "File verification completed"
+                "raw_output": before_output[:1000]
             },
             "duration": 0
         }
@@ -555,7 +617,7 @@ def run_evaluation():
             "exit_code": after_exit_code,
             "tests": after_result.get("tests", []),
             "summary": {
-                "raw_output": (after_result.get("stdout", "") + after_result.get("stderr", ""))[:1000] if (after_result.get("stdout") or after_result.get("stderr")) else "Tests completed"
+                "raw_output": after_output[:1000]
             },
             "duration": 0
         }
