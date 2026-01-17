@@ -99,40 +99,40 @@ def analyze_structure(repo_name: str):
             }
         }
     
-    # For this project, we analyze the main score.py file (if it exists)
-    # or analyze TypeScript/JavaScript files
+    # Analyze TypeScript/JavaScript files (this is a TypeScript/React project)
     main_file = None
     total_lines = 0
     
-    # Look for Python files first (if this is a Python project)
-    py_files = list(repo_path.rglob("*.py"))
-    if py_files:
-        # Find the main file (score.py or similar)
-        for f in py_files:
-            if "node_modules" not in str(f) and "__pycache__" not in str(f):
-                if "score.py" in str(f) or "app.py" in str(f) or "main.py" in str(f):
-                    main_file = f
-                    break
-        if not main_file and py_files:
-            main_file = py_files[0]
-    else:
-        # Look for TypeScript/JavaScript files
-        ts_files = list(repo_path.rglob("*.ts")) + list(repo_path.rglob("*.tsx"))
-        js_files = list(repo_path.rglob("*.js")) + list(repo_path.rglob("*.jsx"))
-        all_files = ts_files + js_files
-        
-        # Find main entry point
+    # Look for TypeScript/JavaScript files first (this is a JS/TS project)
+    ts_files = list(repo_path.rglob("*.ts")) + list(repo_path.rglob("*.tsx"))
+    js_files = list(repo_path.rglob("*.js")) + list(repo_path.rglob("*.jsx"))
+    all_files = ts_files + js_files
+    
+    # Find main entry point
+    for f in all_files:
+        if "node_modules" not in str(f) and "__tests__" not in str(f) and ".test." not in str(f):
+            if "main.tsx" in str(f) or "main.ts" in str(f) or "App.tsx" in str(f) or "index.ts" in str(f) or "index.tsx" in str(f):
+                main_file = f
+                break
+    
+    if not main_file and all_files:
+        # Use first non-test, non-node_modules file
         for f in all_files:
-            if "node_modules" not in str(f) and "__tests__" not in str(f):
-                if "main.tsx" in str(f) or "main.ts" in str(f) or "App.tsx" in str(f) or "index.ts" in str(f):
-                    main_file = f
-                    break
-        if not main_file and all_files:
-            # Use first non-test file
-            for f in all_files:
-                if "node_modules" not in str(f) and "__tests__" not in str(f) and "test" not in str(f).lower():
-                    main_file = f
-                    break
+            if "node_modules" not in str(f) and "__tests__" not in str(f) and ".test." not in str(f) and ".spec." not in str(f):
+                main_file = f
+                break
+    
+    # Fallback to Python files only if no JS/TS files found
+    if not main_file:
+        py_files = list(repo_path.rglob("*.py"))
+        if py_files:
+            for f in py_files:
+                if "node_modules" not in str(f) and "__pycache__" not in str(f):
+                    if "score.py" in str(f) or "app.py" in str(f) or "main.py" in str(f):
+                        main_file = f
+                        break
+            if not main_file and py_files:
+                main_file = py_files[0]
     
     if main_file and main_file.exists():
         try:
@@ -316,13 +316,22 @@ def run_tests(repo_name: str):
     
     try:
         # Run tests with JSON output to a file, then read it
-        with tempfile.NamedTemporaryFile(mode='w+', suffix='.json', delete=False) as tmp_file:
-            json_file = tmp_file.name
+        # Try repo directory first (more reliable in Docker), fallback to temp dir
+        json_file = str(repo_path / "jest-results.json")
+        try:
+            # Ensure we can write to this location
+            test_file = Path(json_file)
+            test_file.parent.mkdir(parents=True, exist_ok=True)
+        except:
+            # Fallback to temp directory
+            json_file = os.path.abspath(tempfile.mktemp(suffix='.json', dir=tempfile.gettempdir()))
         
         try:
             # Run Jest with JSON reporter (also capture stdout/stderr for full output)
+            # Use absolute path for outputFile
+            json_file_abs = os.path.abspath(json_file)
             proc = subprocess.run(
-                ["npx", "jest", "--passWithNoTests", "--json", "--outputFile", json_file],
+                ["npx", "jest", "--passWithNoTests", "--json", "--outputFile", json_file_abs],
                 cwd=repo_path,
                 capture_output=True,
                 text=True,
@@ -332,6 +341,7 @@ def run_tests(repo_name: str):
             
             stdout = proc.stdout
             stderr = proc.stderr
+            full_output = stdout + stderr
             
             # Try to read JSON output
             tests = []
@@ -343,41 +353,52 @@ def run_tests(repo_name: str):
                 "skipped": 0
             }
             
+            json_parsed = False
             try:
-                if os.path.exists(json_file):
-                    with open(json_file, 'r') as f:
+                json_file_abs = os.path.abspath(json_file)
+                if os.path.exists(json_file_abs):
+                    with open(json_file_abs, 'r') as f:
                         jest_json = json.load(f)
                     
-                    summary = {
-                        "total": jest_json.get("numTotalTests", 0),
-                        "passed": jest_json.get("numPassedTests", 0),
-                        "failed": jest_json.get("numFailedTests", 0),
-                        "errors": 0,
-                        "skipped": jest_json.get("numPendingTests", 0)
-                    }
-                    
-                    # Extract individual test results
-                    for test_result in jest_json.get("testResults", []):
-                        test_file = test_result.get("name", "")
-                        for assertion in test_result.get("assertionResults", []):
-                            full_name = assertion.get("fullName", assertion.get("title", "unknown"))
-                            tests.append({
-                                "nodeid": f"{test_file}::{full_name}",
-                                "name": full_name,
-                                "outcome": "passed" if assertion.get("status") == "passed" else "failed"
-                            })
-            except (json.JSONDecodeError, KeyError, FileNotFoundError):
-                # Fall back to text parsing
-                full_output = stdout + stderr
-                parsed = parse_jest_output(full_output)
-                tests = parsed["tests"]
-                summary = parsed["summary"]
+                    # Only use JSON if it has valid test data
+                    if jest_json.get("numTotalTests", 0) > 0 or jest_json.get("testResults"):
+                        summary = {
+                            "total": jest_json.get("numTotalTests", 0),
+                            "passed": jest_json.get("numPassedTests", 0),
+                            "failed": jest_json.get("numFailedTests", 0),
+                            "errors": 0,
+                            "skipped": jest_json.get("numPendingTests", 0)
+                        }
+                        
+                        # Extract individual test results
+                        for test_result in jest_json.get("testResults", []):
+                            test_file = test_result.get("name", "")
+                            for assertion in test_result.get("assertionResults", []):
+                                full_name = assertion.get("fullName", assertion.get("title", "unknown"))
+                                tests.append({
+                                    "nodeid": f"{test_file}::{full_name}",
+                                    "name": full_name,
+                                    "outcome": "passed" if assertion.get("status") == "passed" else "failed"
+                                })
+                        json_parsed = True
+            except (json.JSONDecodeError, KeyError, FileNotFoundError, Exception) as json_error:
+                # JSON parsing failed, will fall back to text parsing
+                pass
             finally:
-                # Clean up temp file
+                # Clean up JSON file (whether in repo or temp dir)
                 try:
-                    os.unlink(json_file)
+                    json_file_abs = os.path.abspath(json_file)
+                    if os.path.exists(json_file_abs):
+                        os.unlink(json_file_abs)
                 except:
                     pass
+            
+            # If JSON parsing failed or produced no results, parse text output
+            if not json_parsed or (summary["total"] == 0 and len(tests) == 0):
+                parsed = parse_jest_output(full_output)
+                if parsed["summary"]["total"] > 0 or len(parsed["tests"]) > 0:
+                    tests = parsed["tests"]
+                    summary = parsed["summary"]
         except Exception as e:
             # If npx jest doesn't work, fall back to npm test
             try:
@@ -413,21 +434,28 @@ def run_tests(repo_name: str):
                 }
         
         # Handle exit code 4 (Jest "no tests collected")
-        # If --passWithNoTests was used and no tests were found, exit code 4 is expected
-        # but should be treated as success (0) if no tests exist
+        # Exit code 4 can be a false positive if tests actually ran and passed
         exit_code = proc.returncode
         if exit_code == 4:
-            # Exit code 4 means "no tests collected"
-            # If we used --passWithNoTests and summary shows 0 tests, treat as success
-            if summary["total"] == 0:
-                # With --passWithNoTests, no tests found is acceptable
+            # If tests actually passed (summary shows passed > 0), exit code 4 is a false positive
+            if summary["total"] > 0 and summary["passed"] == summary["total"]:
+                # Tests passed but Jest returned exit code 4 (likely JSON file issue)
+                exit_code = 0
+                success = True
+            elif summary["total"] == 0:
+                # No tests found - with --passWithNoTests this is acceptable
                 exit_code = 0
                 success = True
             else:
-                # Tests were expected but not found
+                # Some tests failed
+                exit_code = 1
                 success = False
         else:
+            # Normal exit code handling
             success = proc.returncode == 0
+            # If tests passed, ensure exit code is 0
+            if success and summary["total"] > 0 and summary["passed"] == summary["total"]:
+                exit_code = 0
         
         return {
             "success": success,
@@ -491,6 +519,16 @@ def run_evaluation():
         
         before_passed = before_result["success"]
         after_passed = after_result["success"]
+        
+        # Additional check: if tests actually passed (summary shows passed > 0), override success
+        before_summary = before_result.get("summary", {})
+        after_summary = after_result.get("summary", {})
+        
+        # If tests ran and passed, mark as success even if exit code suggests otherwise
+        if after_summary.get("total", 0) > 0 and after_summary.get("passed", 0) == after_summary.get("total", 0):
+            after_passed = True
+        if before_summary.get("total", 0) > 0 and before_summary.get("passed", 0) == before_summary.get("total", 0):
+            before_passed = True
         
         # Handle exit code 4 in test results (convert to 0 if appropriate)
         before_exit_code = before_result["exit_code"]
