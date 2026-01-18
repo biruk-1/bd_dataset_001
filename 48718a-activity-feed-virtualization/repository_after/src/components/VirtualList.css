@@ -1,0 +1,33 @@
+.virtual-list-container {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.virtual-list-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  pointer-events: none;
+}
+
+.virtual-list-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+.virtual-list-item {
+  overflow: hidden;
+}
+
+/* Optimize scrolling performance */
+.virtual-list-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}

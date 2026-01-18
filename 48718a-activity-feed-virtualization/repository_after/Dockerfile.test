@@ -1,0 +1,16 @@
+# Dockerfile for running tests in repository_after
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies (including dev dependencies for testing)
+RUN npm install
+
+# Copy application files
+COPY . .
+
+# Run tests
+CMD ["npm", "test", "--", "--coverage", "--watchAll=false"]

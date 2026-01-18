@@ -1,0 +1,134 @@
+.activity-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+  min-height: 180px;
+}
+
+.activity-item:hover {
+  background: #e9ecef;
+  transform: translateX(4px);
+}
+
+.activity-item.unread {
+  background: #e7f5ff;
+  border-left-color: #007bff;
+}
+
+.activity-left {
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.avatar.comment { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.avatar.log { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.avatar.event { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.avatar.mention { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.avatar.update { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.avatar.alert { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.activity-user {
+  font-weight: 600;
+  color: #333;
+}
+
+.activity-type-icon {
+  font-size: 16px;
+}
+
+.activity-timestamp {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.activity-message {
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.activity-details {
+  color: #6c757d;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.activity-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.activity-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #dee2e6;
+  color: #495057;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.attachment-badge {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.activity-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #dee2e6;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: #f8f9fa;
+  transform: scale(1.1);
+}
