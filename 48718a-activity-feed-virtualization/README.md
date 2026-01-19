@@ -22,31 +22,32 @@ Implemented virtual scrolling (windowed virtualization) that only renders visibl
 docker compose build
 ```
 
-### Before Test Command
+### Run Before (Original Implementation)
 ```bash
-docker compose run --rm -e PYTHONPATH=/app app pytest tests/test_repository_before.py -v
+docker compose up before
+# Open http://localhost:3000
 ```
 
-### After Test Command
+### Run After (Optimized Implementation)
 ```bash
-docker compose run --rm -e PYTHONPATH=/app app pytest tests/test_repository_after.py -v
+docker compose up after
+# Open http://localhost:3001
 ```
 
-### Test & Report Command
+### Run Evaluation
 ```bash
-docker compose run --rm -e PYTHONPATH=/app app python evaluation/evaluation.py
+docker compose run --rm evaluation
 ```
 
 ## Local Running (Without Docker)
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Python 3.11+ and pip
 
 ### Setup
 ```bash
-# Install Python dependencies
-pip install -r requirements.txt
+# Install root dependencies (for evaluation)
+npm install
 
 # Install dependencies for repository_before
 cd repository_before/activity-feed-virtualization
@@ -61,19 +62,15 @@ cd ..
 
 ### Run Tests Locally
 
-**Before tests:**
+**Unified tests (works for both repos):**
 ```bash
-pytest tests/test_repository_before.py -v
-```
-
-**After tests:**
-```bash
-pytest tests/test_repository_after.py -v
+node tests/virtualization.test.js before
+node tests/virtualization.test.js after
 ```
 
 **Evaluation:**
 ```bash
-python evaluation/evaluation.py
+node evaluation/evaluation.js
 ```
 
 ### Run Applications Locally

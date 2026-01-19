@@ -1,0 +1,16 @@
+{
+  "name": "activity-feed-virtualization-evaluation",
+  "version": "1.0.0",
+  "description": "Evaluation scripts for Activity Feed Virtualization project",
+  "main": "evaluation/evaluation.js",
+  "scripts": {
+    "evaluate": "node evaluation/evaluation.js"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

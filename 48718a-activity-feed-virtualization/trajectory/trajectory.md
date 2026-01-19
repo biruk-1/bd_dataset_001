@@ -141,7 +141,5 @@ Tests check for:
 2. **Buffer zone**: 5 items above/below viewport to prevent flickering during scroll.
 3. **Transform positioning**: Using `translateY` instead of absolute positioning for better performance.
 4. **Memoization**: Applied to filtering, callbacks, and item rendering to minimize re-renders.
-5. **Container measurement**: Dynamic height measurement to handle window resizing.
-
-## Result
+5. **Container measurement**: Dynamic height measurement to handle window resizing.## Result
 The implementation successfully reduces DOM nodes from thousands to ~15-20, maintaining 60 FPS even with 10,000+ items, making it suitable for enterprise-scale activity feeds.

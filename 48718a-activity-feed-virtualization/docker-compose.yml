@@ -1,6 +1,41 @@
-# Main docker-compose for running tests and evaluation
 services:
-  app:
+  before:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: activity-feed-before
+    working_dir: /app/repository_before/activity-feed-virtualization
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./repository_before/activity-feed-virtualization:/app/repository_before/activity-feed-virtualization
+      - /app/repository_before/activity-feed-virtualization/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+
+  after:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: activity-feed-after
+    working_dir: /app/repository_after
+    command: npm start
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./repository_after:/app/repository_after
+      - /app/repository_after/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+
+  evaluation:
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,8 +46,5 @@ services:
       - /app/repository_before/activity-feed-virtualization/node_modules
       - /app/repository_after/node_modules
     environment:
-      - PYTHONPATH=/app
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
-    stdin_open: true
-    tty: true
+      - NODE_ENV=test
+    command: node evaluation/evaluation.js

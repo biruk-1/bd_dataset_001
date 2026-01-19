@@ -1,2 +1,16 @@
 evaluation/reports/**
 evaluation/reports/*
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Node modules
+node_modules/
+package-lock.json

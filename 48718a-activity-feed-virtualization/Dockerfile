@@ -1,23 +1,39 @@
-# Dockerfile for evaluation and testing
-FROM python:3.11-slim
+# Single Dockerfile for the entire project
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    nodejs \
-    npm \
-    && rm -rf /var/lib/apt/lists/*
+# Install system dependencies if needed
+RUN apk add --no-cache git
 
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy root package.json (for evaluation scripts)
+COPY package.json ./
 
-# Copy all project files
-COPY . /app
+# Install root dependencies first
+RUN npm install
 
-# Set Python path
-ENV PYTHONPATH=/app
+# Copy evaluation scripts
+COPY evaluation/ ./evaluation/
 
-# Default command (can be overridden)
-CMD ["python", "evaluation/evaluation.py"]
+# Copy test files
+COPY tests/ ./tests/
+
+# Copy both repositories
+COPY repository_before/ ./repository_before/
+COPY repository_after/ ./repository_after/
+
+# Install dependencies for repository_before
+WORKDIR /app/repository_before/activity-feed-virtualization
+COPY repository_before/activity-feed-virtualization/package*.json ./
+RUN npm install
+
+# Install dependencies for repository_after
+WORKDIR /app/repository_after
+COPY repository_after/package*.json ./
+RUN npm install
+
+# Set working directory back to root
+WORKDIR /app
+
+# Default command
+CMD ["node", "evaluation/evaluation.js"]
