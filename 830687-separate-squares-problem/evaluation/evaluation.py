@@ -27,15 +27,15 @@ def environment_info():
 
 
 def run_tests(repo_path: Path):
-
-    """Run pytest for a repository."""
+    """Run pytest for a repository and parse detailed test results."""
+    import re
     
     env = os.environ.copy()
     env["PYTHONPATH"] = str(repo_path)
     
     try:
         proc = subprocess.run(
-            [sys.executable, "-m", "pytest", str(ROOT / "tests"), "-q"],
+            [sys.executable, "-m", "pytest", str(ROOT / "tests"), "-q", "--tb=short"],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -43,22 +43,72 @@ def run_tests(repo_path: Path):
             env=env
         )
         output = (proc.stdout + proc.stderr)[:8000]
+        
+        # Parse pytest output to extract test counts
+        # Look for patterns like "15 failed, 2 passed" or "17 passed"
+        passed_count = 0
+        failed_count = 0
+        total_count = 0
+        
+        # Try to extract counts from output
+        # Pattern 1: "X failed, Y passed" or "X passed, Y failed"
+        match = re.search(r'(\d+)\s+failed', output, re.IGNORECASE)
+        if match:
+            failed_count = int(match.group(1))
+        
+        match = re.search(r'(\d+)\s+passed', output, re.IGNORECASE)
+        if match:
+            passed_count = int(match.group(1))
+        
+        total_count = passed_count + failed_count
+        
+        # If we couldn't parse, try alternative patterns
+        if total_count == 0:
+            # Look for "X passed in Y.Ys" pattern
+            match = re.search(r'(\d+)\s+passed\s+in', output, re.IGNORECASE)
+            if match:
+                passed_count = int(match.group(1))
+                total_count = passed_count
+                # Check return code to see if there were failures
+                if proc.returncode != 0:
+                    # If return code is non-zero but we only see "passed", 
+                    # pytest might have been interrupted or there were errors
+                    failed_count = 1 if proc.returncode != 0 else 0
+        
+        # Determine if tests passed (all tests must pass)
+        all_passed = (proc.returncode == 0) and (failed_count == 0) and (total_count > 0)
+        
         return {
-            "passed": proc.returncode == 0,
+            "passed": all_passed,
             "return_code": proc.returncode,
-            "output": output
+            "output": output,
+            "test_counts": {
+                "total": total_count,
+                "passed": passed_count,
+                "failed": failed_count
+            }
         }
     except subprocess.TimeoutExpired:
         return {
             "passed": False,
             "return_code": -1,
-            "output": "pytest timeout"
+            "output": "pytest timeout",
+            "test_counts": {
+                "total": 0,
+                "passed": 0,
+                "failed": 0
+            }
         }
     except Exception as e:
         return {
             "passed": False,
             "return_code": -1,
-            "output": f"Error running tests: {str(e)}"
+            "output": f"Error running tests: {str(e)}",
+            "test_counts": {
+                "total": 0,
+                "passed": 0,
+                "failed": 0
+            }
         }
 
 
@@ -87,11 +137,30 @@ def run_evaluation():
         before = evaluate("repository_before")
         after = evaluate("repository_after")
         
-        passed_gate = after["tests"]["passed"]
+        before_tests = before["tests"]
+        after_tests = after["tests"]
+        
+        before_passed = before_tests.get("test_counts", {}).get("passed", 0)
+        before_failed = before_tests.get("test_counts", {}).get("failed", 0)
+        before_total = before_tests.get("test_counts", {}).get("total", 0)
+        
+        after_passed = after_tests.get("test_counts", {}).get("passed", 0)
+        after_failed = after_tests.get("test_counts", {}).get("failed", 0)
+        after_total = after_tests.get("test_counts", {}).get("total", 0)
+        
+        passed_gate = after_tests["passed"] and (after_failed == 0)
+        
+        # Create detailed improvement summary
         if passed_gate:
-            improvement_summary = "After implementation passed correctness tests"
+            if before_failed > 0:
+                improvement_summary = f"After implementation: {after_passed}/{after_total} tests passed (improved from {before_passed}/{before_total} passed, {before_failed} failed in before)"
+            else:
+                improvement_summary = f"After implementation: {after_passed}/{after_total} tests passed"
         else:
-            improvement_summary = "After implementation failed correctness tests"
+            if after_failed > 0:
+                improvement_summary = f"After implementation: {after_failed} failed, {after_passed} passed out of {after_total} total tests"
+            else:
+                improvement_summary = "After implementation failed correctness tests"
         
         end = datetime.utcnow()
         
@@ -105,7 +174,9 @@ def run_evaluation():
             "after": after,
             "comparison": {
                 "passed_gate": passed_gate,
-                "improvement_summary": improvement_summary
+                "improvement_summary": improvement_summary,
+                "before_test_summary": f"{before_passed} passed, {before_failed} failed out of {before_total} total",
+                "after_test_summary": f"{after_passed} passed, {after_failed} failed out of {after_total} total"
             },
             "success": passed_gate,
             "error": None
@@ -122,7 +193,12 @@ def run_evaluation():
                 "tests": {
                     "passed": False,
                     "return_code": -1,
-                    "output": ""
+                    "output": "",
+                    "test_counts": {
+                        "total": 0,
+                        "passed": 0,
+                        "failed": 0
+                    }
                 },
                 "metrics": {}
             },
@@ -130,7 +206,12 @@ def run_evaluation():
                 "tests": {
                     "passed": False,
                     "return_code": -1,
-                    "output": ""
+                    "output": "",
+                    "test_counts": {
+                        "total": 0,
+                        "passed": 0,
+                        "failed": 0
+                    }
                 },
                 "metrics": {}
             },
