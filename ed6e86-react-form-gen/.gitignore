@@ -47,3 +47,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+
+# Large patch files (exceed GitHub's 100MB limit)
+patches/*.patch

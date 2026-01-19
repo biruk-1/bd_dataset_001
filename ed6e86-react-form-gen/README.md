@@ -1,34 +1,107 @@
 # Form Builder - Next.js Application
 
-This project contains a form builder application that was converted from vanilla HTML/JavaScript to a modern Next.js application with TypeScript and Tailwind CSS.
+## Problem Statement
 
-## What This Project Does
+This project refactors a vanilla HTML/JavaScript form builder application into a modern Next.js application with TypeScript and Tailwind CSS. The original implementation (`repository_before`) uses plain HTML, JavaScript, and CSS files. The refactored version (`repository_after`) converts the entire application to Next.js App Router with full TypeScript support, maintaining all original functionality while improving code organization, type safety, and maintainability.
 
-The application lets users create custom forms by adding different types of fields:
-- Text inputs (regular text, email, phone, URL)
-- Choice fields (radio buttons and checkboxes)
-- Each field can have custom labels, placeholders, and be marked as required or optional
+## Docker Commands
 
-Users can build forms on one page, see a live preview, save forms to their browser, and view saved forms on another page.
+### Build Docker Image
 
-## Getting Started
+First, build the Docker image:
 
-### Local Development
+```bash
+docker compose build
+```
 
-First, make sure you have Node.js installed (version 20 or higher).
+### Test Commands
 
-**Install dependencies:**
+#### 1. Test Repository Before (Original Implementation)
+
+```bash
+docker compose run --rm app python check_before.py
+```
+
+**What it does:** Verifies that all required files exist in `repository_before` directory.
+
+**Expected output:**
+```
+SUCCESS: All required files present in repository_before
+```
+
+#### 2. Test Repository After (Refactored Implementation)
+
+```bash
+docker compose run --rm app sh /usr/local/bin/run-tests-after.sh
+```
+
+**What it does:** Runs TypeScript type checking and Jest tests on the `repository_after` implementation.
+
+**Expected output:**
+```
+> form-builder-nextjs@1.0.0 type-check
+> tsc --noEmit
+
+> form-builder-nextjs@1.0.0 test
+> jest --passWithNoTests --ci
+
+ PASS  __tests__/types.test.ts
+ PASS  __tests__/formStorage.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       15 passed, 15 total
+```
+
+#### 3. Run Evaluation (Complete Test & Report)
+
+```bash
+docker compose run --rm app python evaluation/evaluation.py
+```
+
+**What it does:** Runs the complete evaluation which:
+- Verifies `repository_before` files exist
+- Runs type checking and tests on `repository_after`
+- Compares results between before and after
+- Generates `report.json` in multiple locations:
+  - `evaluation/reports/report.json`
+  - `evaluation/reports/latest.json`
+  - `report.json` (root directory)
+
+**Expected output:**
+```
+Report written to /app/evaluation/reports/latest.json
+Report written to /app/evaluation/reports/report.json
+Report written to /app/report.json
+```
+
+**Expected results:**
+- All tests pass (15 tests)
+- Type checking passes with no errors
+- Report shows `success: true` for all test suites
+- All exit codes are `0` (no failures)
+
+## Local Development
+
+### Prerequisites
+
+- Node.js version 20 or higher
+- npm or yarn
+
+### Installation
+
 ```bash
 cd repository_after
 npm install
 ```
+
+### Local Commands
 
 **Run the development server:**
 ```bash
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) in your browser. You should see the home page with links to build forms and view saved forms.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
 **Run tests:**
 ```bash
@@ -48,47 +121,51 @@ npm start
 
 ### What to Expect
 
-When you run `npm run dev`:
+**When running `npm run dev`:**
 - The Next.js development server starts on port 3000
 - You can navigate between pages using the header links
 - The form builder lets you add fields and see a live preview
 - Forms are saved to your browser's localStorage
 - The view-form page loads and displays your saved forms
 
-When you run tests:
+**When running tests:**
 - Type tests verify all TypeScript types are correct
 - Storage tests verify localStorage saving and loading works
 - All 15 tests should pass
 
-When you run type-check:
+**When running type-check:**
 - TypeScript compiler checks all files
 - Should show no errors if everything is typed correctly
-
-## Docker Setup
-
-If you want to test everything in Docker (recommended for CI/CD), see the `DOCKER.md` file for all Docker commands.
-
-The quick way to test everything:
-```bash
-docker compose run --rm app python evaluation/evaluation.py
-```
-
-This runs the full evaluation which:
-- Verifies the original files exist
-- Runs type checking
-- Runs all tests
-- Generates a report
 
 ## Project Structure
 
 - `repository_before/` - The original HTML/JavaScript application
-- `repository_after/` - The new Next.js application I built
+- `repository_after/` - The refactored Next.js application
 - `evaluation/` - Scripts that test and evaluate the application
+- `patches/` - Patch files showing differences between before and after
 - `Dockerfile` and `docker-compose.yml` - Docker configuration
+
+## Patch File
+
+A patch file showing the differences between `repository_before` and `repository_after` is available at:
+
+```
+patches/task_001.patch
+```
+
+To view the patch:
+```bash
+cat patches/task_001.patch
+```
+
+Or to apply it (for reference):
+```bash
+git apply patches/task_001.patch
+```
 
 ## What Was Done
 
-I converted the entire application from vanilla JavaScript to Next.js while keeping all functionality:
+The entire application was converted from vanilla JavaScript to Next.js while keeping all functionality:
 
 1. **Converted to Next.js App Router** - Modern routing with the App Router
 2. **Added TypeScript** - Full type safety with no `any` types
