@@ -44,8 +44,6 @@ O(n² log n) where n is the number of squares
 11. Single point square: `[[0, 0, 0.001]]` → split at center
 12. Very large square: `[[0, 0, 1000]]` → split at y=500.0
 13. Negative coordinates: `[[-10, -10, 20]]` → split at y=0.0
-14. Precision requirement: `[[0, 0, 100]]` → split at y=50.0 within 10^-5
-
-### Functional Correctness
+14. Precision requirement: `[[0, 0, 100]]` → split at y=50.0 within 10^-5### Functional Correctness
 15. Area conservation: split creates equal areas above and below
 16. Deterministic output: same input always gives same output

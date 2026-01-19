@@ -1,9 +1,20 @@
 import pytest
 import sys
+import os
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "repository_before"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "repository_after"))
+# Respect PYTHONPATH environment variable to determine which repository to test
+# PYTHONPATH is set by docker-compose to either /app/repository_before or /app/repository_after
+pythonpath = os.environ.get("PYTHONPATH", "")
+if pythonpath:
+    # Use the path specified in PYTHONPATH
+    repo_path = Path(pythonpath)
+    if repo_path.exists():
+        sys.path.insert(0, str(repo_path))
+else:
+    # Fallback: add both paths if PYTHONPATH is not set
+    sys.path.insert(0, str(Path(__file__).parent.parent / "repository_before"))
+    sys.path.insert(0, str(Path(__file__).parent.parent / "repository_after"))
 
 
 def get_solution_module():
