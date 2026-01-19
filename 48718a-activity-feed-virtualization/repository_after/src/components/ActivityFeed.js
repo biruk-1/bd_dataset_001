@@ -4,17 +4,6 @@ import ActivityItem from './ActivityItem';
 import { generateActivities } from '../utils/activityUtils';
 import './ActivityFeed.css';
 
-/**
- * ActivityFeed Component - Main feed with virtual scrolling
- * 
- * This is the optimized version that uses virtual scrolling to handle
- * thousands of activity items efficiently.
- * 
- * Key improvements over the original:
- * - Virtual scrolling: Only renders visible items
- * - Memoized filtering: Avoids recalculating on every render
- * - Optimized performance: Maintains 60 FPS with 10,000+ items
- */
 const ActivityFeed = ({ itemCount = 5000 }) => {
   const [activities, setActivities] = useState([]);
   const [filter, setFilter] = useState('all');
@@ -22,7 +11,6 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
   const [fps, setFps] = useState(60);
   const fpsRef = useRef({ frames: 0, lastTime: performance.now() });
 
-  // Load activities on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       const data = generateActivities(itemCount);
@@ -33,7 +21,6 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
     return () => clearTimeout(timer);
   }, [itemCount]);
 
-  // FPS monitoring
   useEffect(() => {
     let animationId;
     
@@ -56,7 +43,7 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  // Memoize filtered activities to avoid recalculating on every render
+  // Memoize filtered list to avoid recalculating on every render
   const filteredActivities = useMemo(() => {
     if (filter === 'all') {
       return activities;
@@ -64,17 +51,14 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
     return activities.filter(activity => activity.type === filter);
   }, [activities, filter]);
 
-  // Memoize unread count
   const unreadCount = useMemo(() => {
     return activities.filter(a => a.isUnread).length;
   }, [activities]);
 
-  // Memoize filter handler to prevent recreating on each render
   const handleFilterChange = useCallback((newFilter) => {
     setFilter(newFilter);
   }, []);
 
-  // Render function for virtual list
   const renderActivity = useCallback((activity, index) => {
     return <ActivityItem activity={activity} index={index} />;
   }, []);
@@ -89,7 +73,6 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
 
   return (
     <div className="activity-feed-container" data-testid="activity-feed">
-      {/* Header with title and stats */}
       <div className="feed-header">
         <div className="header-left">
           <h2>Activity Feed</h2>
@@ -103,7 +86,6 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
           )}
         </div>
         
-        {/* Filter controls */}
         <div className="filter-controls">
           <button 
             className={filter === 'all' ? 'active' : ''} 
@@ -136,7 +118,6 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
         </div>
       </div>
 
-      {/* Performance metrics */}
       <div className="performance-metrics">
         <div 
           className={`fps-indicator ${fps < 30 ? 'critical' : fps < 50 ? 'warning' : 'good'}`}
@@ -149,7 +130,7 @@ const ActivityFeed = ({ itemCount = 5000 }) => {
         </div>
       </div>
 
-      {/* Virtualized activity list */}
+      {/* VirtualList only renders visible items instead of all items */}
       <VirtualList
         items={filteredActivities}
         itemHeight={200}

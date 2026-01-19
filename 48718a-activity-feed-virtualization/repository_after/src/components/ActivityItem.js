@@ -2,25 +2,13 @@ import React, { useMemo } from 'react';
 import { formatTimestamp, getTypeIcon } from '../utils/activityUtils';
 import './ActivityItem.css';
 
-/**
- * ActivityItem Component - Optimized with React.memo
- * 
- * This component represents a single activity in the feed.
- * It's memoized to prevent unnecessary re-renders when parent updates.
- * 
- * Key optimizations:
- * - Wrapped in React.memo with custom comparison
- * - Expensive computations are memoized
- * - Formatted timestamp is cached
- */
+// Memoized to prevent unnecessary re-renders when parent updates
 const ActivityItem = React.memo(({ activity, index }) => {
-  // Memoize the formatted timestamp to avoid recalculating on every render
   const formattedTime = useMemo(
     () => formatTimestamp(activity.timestamp),
     [activity.timestamp]
   );
 
-  // Memoize the type icon
   const typeIcon = useMemo(
     () => getTypeIcon(activity.type),
     [activity.type]
@@ -73,8 +61,8 @@ const ActivityItem = React.memo(({ activity, index }) => {
     </div>
   );
 }, (prevProps, nextProps) => {
-  // Custom comparison function - only re-render if activity ID changed
-  // This is safe because activities are immutable in our implementation
+  // Only re-render if activity ID or unread status changes
+  // This prevents re-renders when other activities update
   return prevProps.activity.id === nextProps.activity.id &&
          prevProps.activity.isUnread === nextProps.activity.isUnread;
 });

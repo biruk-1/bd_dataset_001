@@ -1,0 +1,8 @@
+BEFORE TEST COMMAND:
+docker compose run --rm -e PYTHONPATH=/app app pytest tests/test_repository_before.py -v
+
+AFTER TEST COMMAND:
+docker compose run --rm -e PYTHONPATH=/app app pytest tests/test_repository_after.py -v
+
+TEST & REPORT COMMAND:
+docker compose run --rm -e PYTHONPATH=/app app python evaluation/evaluation.py

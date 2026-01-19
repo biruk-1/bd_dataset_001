@@ -12,5 +12,5 @@ RUN npm install
 # Copy application files
 COPY . .
 
-# Run tests
-CMD ["npm", "test", "--", "--watchAll=false"]
+# Run tests with JSON output
+CMD ["npm", "test", "--", "--watchAll=false", "--json"]

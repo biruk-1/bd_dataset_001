@@ -1,9 +1,3 @@
-/**
- * Generates mock activity data for testing and demonstration
- * 
- * @param {number} count - Number of activities to generate
- * @returns {Array} Array of activity objects
- */
 export const generateActivities = (count) => {
   const types = ['comment', 'log', 'event', 'mention', 'update', 'alert'];
   const users = ['Alice', 'Bob', 'Carol', 'David', 'Eve', 'Frank', 'Grace', 'Henry'];
@@ -43,12 +37,6 @@ export const generateActivities = (count) => {
   });
 };
 
-/**
- * Formats a timestamp into a human-readable relative time
- * 
- * @param {string} timestamp - ISO timestamp string
- * @returns {string} Formatted relative time (e.g., "2h ago")
- */
 export const formatTimestamp = (timestamp) => {
   const date = new Date(timestamp);
   const now = new Date();
@@ -63,12 +51,6 @@ export const formatTimestamp = (timestamp) => {
   return `${diffDays}d ago`;
 };
 
-/**
- * Gets an emoji icon for an activity type
- * 
- * @param {string} type - Activity type
- * @returns {string} Emoji icon
- */
 export const getTypeIcon = (type) => {
   const icons = {
     comment: '💬',

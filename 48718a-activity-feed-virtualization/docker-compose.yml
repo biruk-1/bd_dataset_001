@@ -1,42 +1,18 @@
-# Main docker-compose for running both repositories
-# Note: version is obsolete in newer Docker Compose versions
-# Use individual docker-compose files in each repo for specific builds
-
+# Main docker-compose for running tests and evaluation
 services:
-  # Original implementation (repository_before)
-  before:
+  app:
     build:
-      context: ./repository_before/activity-feed-virtualization
+      context: .
       dockerfile: Dockerfile
-    container_name: activity-feed-before
-    ports:
-      - "3000:3000"
+    container_name: activity-feed-evaluation
     volumes:
-      - ./repository_before/activity-feed-virtualization:/app
-      - before_node_modules:/app/node_modules
+      - .:/app
+      - /app/node_modules
+      - /app/repository_before/activity-feed-virtualization/node_modules
+      - /app/repository_after/node_modules
     environment:
+      - PYTHONPATH=/app
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
     stdin_open: true
     tty: true
-
-  # Optimized implementation (repository_after)
-  after:
-    build:
-      context: ./repository_after
-      dockerfile: Dockerfile
-    container_name: activity-feed-after
-    ports:
-      - "3001:3000"
-    volumes:
-      - ./repository_after:/app
-      - after_node_modules:/app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
-    stdin_open: true
-    tty: true
-
-volumes:
-  before_node_modules:
-  after_node_modules:

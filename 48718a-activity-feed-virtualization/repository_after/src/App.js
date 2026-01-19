@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import ActivityFeed from './components/ActivityFeed';
 import './App.css';
 
-/**
- * App Component - Main application wrapper
- * 
- * Provides controls to test the virtualized activity feed with different
- * item counts to demonstrate performance improvements.
- */
 function App() {
   const [itemCount, setItemCount] = useState(5000);
   const [inputValue, setInputValue] = useState(5000);
@@ -25,7 +19,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* Banner explaining the optimization */}
       <div className="banner">
         <h1>✨ Activity Feed - Virtual Scrolling Optimization</h1>
         <p>
@@ -34,7 +27,6 @@ function App() {
         </p>
       </div>
 
-      {/* Controls to adjust item count */}
       <div className="controls">
         <label htmlFor="item-count-input">Item Count:</label>
         <input 
@@ -59,7 +51,6 @@ function App() {
         </div>
       </div>
       
-      {/* The virtualized activity feed */}
       <div className="feed-wrapper">
         <ActivityFeed key={itemCount} itemCount={itemCount} />
       </div>
